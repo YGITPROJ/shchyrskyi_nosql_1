@@ -1,11 +1,11 @@
-// Run: mongosh "YOUR_MONGODB_URI" --file scripts/02_transform.js
+// Run: mongosh "URI" --file scripts/02_transform.js
 
 const dbName = "spotify";
 const db = db.getSiblingDB(dbName);
 
-console.log('1 Очищення колекції tracks');
+console.log('Очищення колекції tracks');
 db.tracks.drop();
-console.log('1 Aggregation Pipeline');
+console.log('Aggregation Pipeline');
 
 db.tracks_raw.aggregate([
     {
@@ -73,7 +73,7 @@ db.tracks_raw.aggregate([
     }
 ]);
 
-console.log("3 Перевірка");
+console.log("Перевірка");
 const count = db.tracks.countDocuments({});
 console.log(`Кількість документів у 'tracks': ${count}`);
 

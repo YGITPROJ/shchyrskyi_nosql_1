@@ -1,8 +1,8 @@
-// Run: mongosh "YOUR_MONGODB_URI" --file scripts/02_transform.js
+// Run: mongosh "URI" --file scripts/02_transform.js
 
 const db = db.getSiblingDB("spotify");
 
-console.log("=== Завдання 1. Треки для вечірки ===");
+console.log("Треки для вечірки");
 const partyTracks = db.tracks.find({
     "audio_features.danceability": { $gt: 0.7 },
     "audio_features.energy": { $gt: 0.7 },
@@ -11,7 +11,7 @@ const partyTracks = db.tracks.find({
 printjson(partyTracks.toArray());
 
 
-console.log("\n=== Завдання 2. Виконавці, у яких усі треки популярні ===");
+console.log("Виконавці, у яких усі треки популярні");
 const popularArtists = db.tracks.aggregate([
     { $unwind: "$artists" }, // Розбиваємо масив, щоб працювати з кожним артистом окремо
     {
@@ -43,7 +43,7 @@ const popularArtists = db.tracks.aggregate([
 printjson(popularArtists.toArray());
 
 
-console.log("\n=== Завдання 3. Нетипові треки (Outliers) ===");
+console.log("Нетипові треки (Outliers)");
 const outliers = db.tracks.aggregate([
     {
         $group: {
@@ -82,7 +82,7 @@ const outliers = db.tracks.aggregate([
 printjson(outliers.toArray());
 
 
-console.log("\n=== Завдання 4: Треки для фонової роботи ===");
+console.log("Треки для фонової роботи");
 const chillTracks = db.tracks.find({
     "audio_features.loudness": { $lt: -10 },
     "audio_features.speechiness": { $lt: 0.1 },

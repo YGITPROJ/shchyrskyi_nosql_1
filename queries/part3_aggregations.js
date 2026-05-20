@@ -1,8 +1,8 @@
-// Run: mongosh "YOUR_MONGODB_URI" --file scripts/02_transform.js
+// Run: mongosh "URI" --file scripts/queries/part3_aggregations.js
 
 const db = db.getSiblingDB("spotify");
 
-console.log("=== Завдання 1. Топ-10 виконавців за середньою популярністю ===");
+console.log("Топ-10 виконавців за середньою популярністю");
 const topArtists = db.tracks.aggregate([
     { $unwind: "$artists" },
     {
@@ -26,28 +26,28 @@ const topArtists = db.tracks.aggregate([
 printjson(topArtists.toArray());
 
 
-console.log("\n=== Завдання 2. Розподіл треків за настроєм ===");
+console.log("Розподіл треків за настроєм");
 const moodDistribution = db.tracks.aggregate([
     {
         $project: {
             mood: {
                 $switch: {
                     branches: [
-                        { 
-                            case: { $and: [{ $gte: ["$audio_features.valence", 0.5] }, { $gte: ["$audio_features.energy", 0.5] }] }, 
-                            then: "happy" 
+                        {
+                            case: { $and: [{ $gte: ["$audio_features.valence", 0.5] }, { $gte: ["$audio_features.energy", 0.5] }] },
+                            then: "happy"
                         },
-                        { 
-                            case: { $and: [{ $lt: ["$audio_features.valence", 0.5] }, { $gte: ["$audio_features.energy", 0.5] }] }, 
-                            then: "angry" 
+                        {
+                            case: { $and: [{ $lt: ["$audio_features.valence", 0.5] }, { $gte: ["$audio_features.energy", 0.5] }] },
+                            then: "angry"
                         },
-                        { 
-                            case: { $and: [{ $gte: ["$audio_features.valence", 0.5] }, { $lt: ["$audio_features.energy", 0.5] }] }, 
-                            then: "calm" 
+                        {
+                            case: { $and: [{ $gte: ["$audio_features.valence", 0.5] }, { $lt: ["$audio_features.energy", 0.5] }] },
+                            then: "calm"
                         },
-                        { 
-                            case: { $and: [{ $lt: ["$audio_features.valence", 0.5] }, { $lt: ["$audio_features.energy", 0.5] }] }, 
-                            then: "sad" 
+                        {
+                            case: { $and: [{ $lt: ["$audio_features.valence", 0.5] }, { $lt: ["$audio_features.energy", 0.5] }] },
+                            then: "sad"
                         }
                     ],
                     default: "unknown"
@@ -66,7 +66,7 @@ const moodDistribution = db.tracks.aggregate([
 printjson(moodDistribution.toArray());
 
 
-console.log("\n=== Завдання 3. Найбільш «танцювальний» жанр ===");
+console.log("Найбільш «танцювальний» жанр");
 const danceableGenres = db.tracks.aggregate([
     {
         $group: {

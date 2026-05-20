@@ -1,8 +1,8 @@
-// Run: mongosh "YOUR_MONGODB_URI" --file scripts/02_transform.js
+// Run: mongosh "URI" --file scripts/queries/part4_indexes.js
 
 const db = db.getSiblingDB("spotify");
 
-console.log("=== Завдання 1. Аналіз запиту та індексація ===");
+console.log("Аналіз запиту та індексація");
 
 // 1. Аналіз БЕЗ індексу
 console.log("План виконання до створення індексу:");
@@ -14,7 +14,7 @@ printjson(explainBefore.executionStats);
 
 // 2. Створення індексу (Compound Index)
 // Використовуємо стратегію ESR (Equality, Sort, Range)
-console.log("\nСтворення індексу за правилом ESR...");
+console.log("Створення індексу за правилом ESR");
 db.tracks.createIndex({
   track_genre: 1,
   popularity: -1,
@@ -30,7 +30,7 @@ const explainAfter = db.tracks.find({
 printjson(explainAfter.executionStats);
 
 
-console.log("\n=== Завдання 2. Індекс для фонової роботи ===");
+console.log("Індекс для фонової роботи");
 
 // Створюємо складений індекс
 db.tracks.createIndex({
